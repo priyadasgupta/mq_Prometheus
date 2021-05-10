@@ -62,7 +62,8 @@ public class QueueMetrics {
 
                 if (UtilClass.checkIfAllowed(queueName, excludeQueueList, includeQueueList)) {
                     this.qStats = new QueueStats();
-                    setQueueStats(response, queueName);
+                    this.qStats = setQueueStats(response, queueName);
+                    this.queueNameStatsList.add(this.qStats);
                 }
             }
 
@@ -71,7 +72,7 @@ public class QueueMetrics {
         }
     }
 
-    private void setQueueStats(PCFMessage response, String queueName) {
+    private QueueStats setQueueStats(PCFMessage response, String queueName) {
         try {
             int qType = response.getIntParameterValue(MQConstants.MQIA_Q_TYPE);
 
@@ -104,13 +105,14 @@ public class QueueMetrics {
                 this.qStats.setQueueOpenInputCount(0);
                 this.qStats.setQueueOpenOutputCount(0);
             }
-            this.queueNameStatsList.add(this.qStats);
+            //this.queueNameStatsList.add(this.qStats);
             System.out.println("Queue = " + queueName + ", depth = " + this.qStats.getQueueDepth()
                         + ", type = " + this.qStats.getQueueType());
 
         } catch (PCFException ex) {
             System.err.println("setQueueStats() ====== " + ex);
         }
+        return this.qStats;
     }
 
     private PCFMessage getPCFInquireQueueStatus(String qName) {
