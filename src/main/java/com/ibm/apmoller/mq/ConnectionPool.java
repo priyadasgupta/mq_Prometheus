@@ -107,7 +107,7 @@ public class ConnectionPool {
         try {
             this.qmgr = new MQQueueManager(this.queueManager, this.envVar);
         } catch (MQException ex) {
-            System.err.println(ex);
+            System.err.println("createMQConnection : " + ex);
         }
     }
 
