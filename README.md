@@ -34,4 +34,4 @@ Queue -
 8) Under "Networking" there will be another option "Routes". Select Routes and there should be an entry linked to the Services name, since the checkbox was selected in step 5.
 If there are no routes entry, then create a route and link it to the proper Services and target port.
 9) In the details section of Routes, the location gives us the host from which we can access the application. Append the required url to the location to hit the rest controller.
-In this case it will be: <location url>/actuator/prometheus
+In this case it will be: "location url"/actuator/prometheus
