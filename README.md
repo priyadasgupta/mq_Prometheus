@@ -2,27 +2,39 @@
 Prints MQ custom metrics in prometheus for MQ Channels and Queues.
 Certain channels and queues are configured in application.yaml for which the metrics is printed.
 
-# The following Channel related metrics are printed:
-	Channel Status - "mq:channelStatus"
-	Total message count over channel - "mq:msgsCountOverChannel"
-	Total bytes received over channel - "mq:bytesReceivedOverChannel"
-	Total bytes sent over channel - "mq:bytesSentOverChannel"
-	Max message length - "mq:maxMessageLengthOverChannel"
+## The following Channel related metrics are printed:
+  * Channel Status - "mq:channelStatus"
+  * Total message count over channel - "mq:msgsCountOverChannel"
+  * Total bytes received over channel - "mq:bytesReceivedOverChannel"
+  * Total bytes sent over channel - "mq:bytesSentOverChannel"
+  * Max message length - "mq:maxMessageLengthOverChannel"
 
-# The following Queue related metrics are printed:
-	Current queue depth - "mq:queueDepth"
-	Max queue depth - "mq:maxQueueDepth"
-	Open input count - "mq:queueOpenInputCount"
-	Open output count - "mq:queueOpenOutputCount"
-	Inquire processes - "mq:queueInquireProcesses"
-	Last get date time - "mq:lastGetDateTime"
-	Last put date time - "mq:lastPutDateTime"
-	Oldest message age - "mq:oldestMsgAge"
-	Dequeue count - "mq:deQueuedCount"
-	Enqueue count - "mq:enQueuedCount"
+## The following Queue related metrics are printed:
+  * Current queue depth - "mq:queueDepth"
+  * Max queue depth - "mq:maxQueueDepth"
+  * Open input count - "mq:queueOpenInputCount"
+  * Open output count - "mq:queueOpenOutputCount"
+  * Inquire processes - "mq:queueInquireProcesses"
+  * Last get date time - "mq:lastGetDateTime"
+  * Last put date time - "mq:lastPutDateTime"
+  * Oldest message age - "mq:oldestMsgAge"
+  * Dequeue count - "mq:deQueuedCount"
+  * Enqueue count - "mq:enQueuedCount"
 
-# Deployment Steps in OpenShift
+## Deployment Steps in OpenShift
 1) Create a docker file to copy the clientKey to the Openshift cluster. Also the docker file would help in deployment from github to OC.
+	
+        FROM maven:3.6.3-openjdk-8 as MAVEN_BUILD
+        COPY pom.xml /build/
+        COPY src /build/src/
+        WORKDIR /build/
+        RUN mvn clean package -DskipTests
+        
+        FROM openjdk:8-jdk-alpine
+        COPY clientkey.jks clientkey.jks
+        COPY --from=MAVEN_BUILD /build/target/<artifact>.jar <target-artifact>.jar
+        ENTRYPOINT ["java","-jar","<target-artifact>.jar"]
+
 2) In OC Cluster, create a new project which acts as the namespace.
 3) Change the role to Developer if it shows Administrator on the left hand side of the window.
 4) Since we have created a docker file to deploy the application, in "Add" menu, select "From Dockerfile"
