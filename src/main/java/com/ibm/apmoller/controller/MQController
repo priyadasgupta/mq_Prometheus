@@ -1,0 +1,19 @@
+package com.ibm.apmoller.controller;
+
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.AllArgsConstructor;
+
+@RestController
+@Validated
+@AllArgsConstructor
+public class MQController {
+
+    @GetMapping("/hello")
+    private String getFunc() {
+        System.out.println("Returning from the controller");
+        return "Hello there!";
+    }
+}
